@@ -4,35 +4,18 @@
 #include "fun_stack.h"
 
 int main() {
-	stack_t stack = NULL;
-	stack = put_on_fun_stack(1, "abc", stack);
-	stack = put_on_fun_stack(2, "bcd", stack);
-	stack = put_on_fun_stack(3, "cde", stack);
-	stack = put_on_fun_stack(4, "def", stack);
+	stack = NULL;
+	put_on_fun_stack(1, "abc");
+	put_on_fun_stack(2, "bcd");
+	put_on_fun_stack(3, "cde");
+	put_on_fun_stack(4, "def");
 
-	res tmp = get_from_fun_stack(stack);
-	stack = tmp.first;
-
-	printf("%s\n", tmp.funame);
-	
-	tmp = get_from_fun_stack(stack);
-	stack = tmp.first;
-
-	printf("%s\n", tmp.funame);
-
+	printf("%s\n", get_from_fun_stack());
+	printf("%d\n", top_of_funstack());
 	stack_t first = stack;
 	while (first != NULL) {
 		printf("%d\t%s\n", first -> par, first -> fname);
 		first = first -> next;
 	}
-
-	tmp = get_from_fun_stack(stack);
-	stack = tmp.first;
-
-	printf("%s\n", tmp.funame);
-
-	tmp = get_from_fun_stack(stack);
-	stack = tmp.first;
-
-	printf("%s\n", tmp.funame);
+	return 0;
 }
