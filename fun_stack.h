@@ -7,9 +7,9 @@ typedef struct stack {
 	int par;
 	char *fname;
 	struct stack *next;
-} *stack_t;
+} *stac_t;
 
-stack_t stack;
+stac_t stack;
 
 int top_of_funstack( void );  // zwraca par_level - "zagłębienie nawiasowe" przechowywane na szczycie
 void put_on_fun_stack( int par_level, char *funame ); // odkłada na stos parę (funame,par_level)

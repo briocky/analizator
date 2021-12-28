@@ -11,7 +11,7 @@ int top_of_funstack(void) {
 }
 
 void put_on_fun_stack( int par_level, char *funame ) {
-	stack_t new = malloc(sizeof new);
+	stac_t new = malloc(sizeof new);
 	new -> fname = malloc(strlen(funame) + 1 * sizeof(char));
 	new -> next = stack;
 	new -> par = par_level;
@@ -22,7 +22,7 @@ void put_on_fun_stack( int par_level, char *funame ) {
 char* get_from_fun_stack( void ) {
 	char *name = malloc(strlen(stack -> fname) + 1 * sizeof(char));
 	name = stack -> fname;
-	stack_t tmp = stack;
+	stac_t tmp = stack;
 	stack = stack -> next;
 	free(tmp -> fname);
 	free(tmp -> next);

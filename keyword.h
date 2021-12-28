@@ -1,0 +1,1 @@
+int isKeyword(char* str);
