@@ -8,14 +8,13 @@
 
 void analizatorSkladni(char *inpname)
 { // przetwarza plik inpname
-
   FILE *in = fopen(inpname, "r");
 
   int nbra = 0; // bilans nawiasów klamrowych {}
   int npar = 0; // bilans nawiasów zwykłych ()
   
   alex_init4file(in); // ustaw analizator leksykalny, aby czytał in
-  
+
   lexem_t lex;
 
   lex = alex_nextLexem(); // pobierz następny leksem
@@ -27,6 +26,7 @@ void analizatorSkladni(char *inpname)
     {
       char *iname = alex_ident(); // zapamiętaj identyfikator i patrz co dalej
       lexem_t nlex = alex_nextLexem();
+
       if (nlex == OPEPAR)
       { // nawias otwierający - to zapewne funkcja
         npar++;
@@ -46,6 +46,7 @@ void analizatorSkladni(char *inpname)
       break;
     case CLOPAR:
     { // zamykający nawias - to może być koniec prototypu, nagłówka albo wywołania
+      
       if (top_of_funstack() == npar)
       {                                  // sprawdzamy, czy liczba nawiasów bilansuje się z wierzchołkiem stosu funkcji
                                          // jeśli tak, to właśnie wczytany nawias jest domknięciem nawiasu otwartego
@@ -85,7 +86,8 @@ void analizatorSkladni(char *inpname)
 
 /*MAIN*/
 int main (int argc, char **argv){
-  analizatorSkladni(*argv);
-
+  store_init();
+  analizatorSkladni(argv[1]);
+  wypisz();
   return 0;
 }

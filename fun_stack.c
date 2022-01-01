@@ -12,20 +12,23 @@ int top_of_funstack(void) {
 
 void put_on_fun_stack( int par_level, char *funame ) {
 	stac_t new = malloc(sizeof new);
-	new -> fname = malloc(strlen(funame) + 1 * sizeof(char));
+	new -> fname = malloc((strlen(funame) + 1) * sizeof(char));
 	new -> next = stack;
 	new -> par = par_level;
-	new -> fname = funame;
+	strcpy(new->fname, funame);
+	//new -> fname = funame;// wydaje mi sie ze powinno byc  tu strcpy(new->fname, funame)
 	stack = new;
 }
 
 char* get_from_fun_stack( void ) {
-	char *name = malloc(strlen(stack -> fname) + 1 * sizeof(char));
-	name = stack -> fname;
+	char *name = malloc((strlen(stack -> fname) + 1) * sizeof(char));
+	strcpy(name, stack->fname);
+	//name = stack -> fname;
 	stac_t tmp = stack;
 	stack = stack -> next;
 	free(tmp -> fname);
-	free(tmp -> next);
+	//free(tmp -> next);
 	free(tmp);
+	
 	return name;
 }

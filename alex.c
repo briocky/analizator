@@ -7,6 +7,10 @@
 static int ln = 0;
 static char ident[256];
 static FILE *ci = NULL;
+static int c;
+static int n_lex_return = 0;/* zwrot z funckji nextLexem*/
+                        /* 1 - wszedl do if'a ktory pobiera o jeden znak za duzo*/
+                        /* 0 - wszedl do innego miejsca*/
 
 void alex_init4file(FILE *in)
 {
@@ -16,21 +20,31 @@ void alex_init4file(FILE *in)
 
 lexem_t alex_nextLexem(void)
 {
-  int c;
-  while ((c = fgetc(ci)) != EOF)
+  if(n_lex_return==1){
+    ungetc(c, ci);/*trzeba bylo to tak rozwiazac, bo takto gdy funkcja wchodzila do "else if (isalpha(c)) to czytala zawsze o jeden znak wiecej i powodowalo to blad"*/
+  }
+  while ((c=fgetc(ci))!=EOF)
   {
     if (isspace(c))
       continue;
     else if (c == '\n')
       ln++;
-    else if (c == '(')
+    else if (c == '('){
+      n_lex_return=0;
       return OPEPAR;
-    else if (c == ')')
+    }
+    else if (c == ')'){
+      n_lex_return=0;
       return CLOPAR;
-    else if (c == '{')
+    }
+    else if (c == '{'){
+      n_lex_return=0;
       return OPEBRA;
-    else if (c == '}')
+    }
+    else if (c == '}'){
+      n_lex_return=0;
       return CLOBRA;
+    }
     else if (isalpha(c))
     {
       int i = 1;
@@ -38,12 +52,13 @@ lexem_t alex_nextLexem(void)
       while (isalnum(c = fgetc(ci)))
         ident[i++] = c;
       ident[i] = '\0';
+      n_lex_return=1;
       return isKeyword(ident) ? OTHER : IDENT;
     }
     else if (c == '"')
     {
       /* Uwaga: tu trzeba jeszcze poprawic obsluge nowej linii w trakcie napisu
-         i \\ w napisie 
+        i \\ w napisie 
       */
       int cp = c;
       while ((c = fgetc(ci)) != EOF && c != '"' && cp == '\\')

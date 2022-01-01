@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "store.h"
 #include <string.h>
+#include <stdlib.h>
 
 static store_t store = {0,0,0,0};
 
@@ -15,6 +16,7 @@ void store_add_def(char *fun_name, int line_number, char *inpname){ /* definicja
     }
     /* jezeli tu jest teraz, to nie znalazlo takiej funkcji */
     if(store.fun_counter<MAX_FUN_NUMBER){/*sprawdzamy czy jeszcze mozemy dodac cos*/
+        store.fun_names[store.fun_counter] = malloc((strlen(inpname)+1)* sizeof (char));
         strcpy(store.fun_names[store.fun_counter],fun_name);
         store.def_line[store.fun_counter]=line_number; /*definicja tez bedzie tylko jedna*/
         store.fun_counter++;
@@ -27,8 +29,9 @@ void store_add_def(char *fun_name, int line_number, char *inpname){ /* definicja
 void store_add_proto(char *fun_name, int line_number, char *inpname){ /* prototyp funkcji */
     int i,j;
     store.proto_counter++; /* zakladam, ze ktos nie dodal kilku prototypow tej samej funkcji*/
-
+    
     if(store.fun_counter<MAX_FUN_NUMBER){/*sprawdzamy czy jeszcze mozemy dodac cos*/
+        store.fun_names[store.fun_counter] = malloc((strlen(inpname)+1)* sizeof (char));
         strcpy(store.fun_names[store.fun_counter],fun_name);
         store.proto_line[store.fun_counter]=line_number; /*prototyp bedzie tylko jeden*/
         store.fun_counter++;
@@ -72,4 +75,26 @@ void store_init(){
         store.def_line[i]=-1;
         store.proto_line[i]=-1;
     }
+}
+
+void wypisz(){
+    int i=store.fun_counter;
+    printf("Liczba funkcji w pliku: %d. Oto one:\n->\t",i);
+    while(i--)
+        printf("%s; ", store.fun_names[i]);
+    printf("\n");
+    printf("Liczba prototypow funkcji: %d.", store.proto_counter);
+    if(store.proto_counter!=0){
+        for(i=0;i<store.proto_counter;i++){
+            printf("\n\t\'%s\' w linii %d;",store.fun_names[i], store.proto_line[i]);
+        }
+        printf("\n");
+    }else{
+        printf("\n");
+    }
+    printf("Liczba definicji funkcji: %d.\n", store.def_counter);
+    printf("Liczba wywolan funkcji: %d.\n", store.call_counter);
+
+
+
 }

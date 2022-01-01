@@ -7,7 +7,7 @@ typedef struct {
     int call_counter;
     int fun_counter;/* pokazuje ilosc funkcji (roznych)w  programie*/
 
-    char (*fun_names)[MAX_FUN_NUMBER]; /* nazwy funkcji w programie */
+    char *fun_names[MAX_FUN_NUMBER]; /* nazwy funkcji w programie */
 
     int def_line[MAX_FUN_NUMBER]; /* kazdy element tej tablicy odpowiada za trzymanie informacji o linii w ktorej definicja funkcji wystapila */
     int proto_line[MAX_FUN_NUMBER]; /*analogicznie*/
@@ -19,3 +19,7 @@ void store_add_def(char *fun_name, int line_number, char *inpname);
 void store_add_proto(char *fun_name, int line_number, char *inpname);
 
 void store_add_call(char *fun_name, int line_number, char *inpname);
+
+void store_init();
+
+void wypisz();
