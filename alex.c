@@ -25,10 +25,13 @@ lexem_t alex_nextLexem(void)
   }
   while ((c=fgetc(ci))!=EOF)
   {
-    if (isspace(c))
+    if (isspace(c)){
+      if(c=='\n')
+        ln++;
       continue;
-    else if (c == '\n')
-      ln++;
+    }
+    /*else if (c == '\n')
+      ln++;*/
     else if (c == '('){
       n_lex_return=0;
       return OPEPAR;
