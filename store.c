@@ -59,6 +59,7 @@ void store_add_call(char *fun_name, int line_number, char *inpname){
     }
     /* jezeli tu jest teraz, to nie znalazlo takiej funkcji */
     if(store.fun_counter<MAX_FUN_NUMBER){/*sprawdzamy czy jeszcze mozemy dodac cos*/
+        store.fun_names[store.fun_counter] = malloc((strlen(inpname)+1)* sizeof (char)); //Dodałem to bo wywalało segmentation fault
         strcpy(store.fun_names[store.fun_counter],fun_name);
         store.call_line[store.fun_counter][0]=line_number; /* dajemu od "0", bo to jest pierwsze wywolanie*/
         store.fun_counter++;
@@ -93,7 +94,25 @@ void wypisz(){
         printf("\n");
     }
     printf("Liczba definicji funkcji: %d.\n", store.def_counter);
+    if(store.def_counter!=0){
+        for(i=0;i<store.def_counter;i++){
+            if (store.def_line[i] != -1)
+                printf("\n\t\'%s\' w linii %d;",store.fun_names[i], store.def_line[i]);
+        }
+        printf("\n");
+    }else{
+        printf("\n");
+    }
     printf("Liczba wywolan funkcji: %d.\n", store.call_counter);
+    if(store.call_counter!=0){
+        for(i=0;i<store.call_counter;i++){
+            if (store.call_line[i][0] != -1)
+                printf("\n\t\'%s\' w linii %d;",store.fun_names[i], store.call_line[i][0]);
+        }
+        printf("\n");
+    }else{
+        printf("\n");
+    }
 
 
 

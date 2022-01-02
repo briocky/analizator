@@ -14,7 +14,7 @@ static int n_lex_return = 0;/* zwrot z funckji nextLexem*/
 
 void alex_init4file(FILE *in)
 {
-  ln = 0;
+  ln = 1;
   ci = in;
 }
 
@@ -22,6 +22,7 @@ lexem_t alex_nextLexem(void)
 {
   if(n_lex_return==1){
     ungetc(c, ci);/*trzeba bylo to tak rozwiazac, bo takto gdy funkcja wchodzila do "else if (isalpha(c)) to czytala zawsze o jeden znak wiecej i powodowalo to blad"*/
+    n_lex_return = 0;
   }
   while ((c=fgetc(ci))!=EOF)
   {
@@ -30,6 +31,7 @@ lexem_t alex_nextLexem(void)
         ln++;
       continue;
     }
+    //tutaj coś odkomentowałem
     /*else if (c == '\n')
       ln++;*/
     else if (c == '('){
