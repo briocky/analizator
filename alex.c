@@ -63,15 +63,30 @@ lexem_t alex_nextLexem(void)
       /* Uwaga: tu trzeba jeszcze poprawic obsluge nowej linii w trakcie napisu
         i \\ w napisie 
       */
-      int cp = c;
-      while ((c = fgetc(ci)) != EOF && c != '"' && cp == '\\')
+      int cp;
+      while ((c = fgetc(ci)) != EOF && c != '"')
       {
-        cp = c;
+        cp=c;
+        if(cp=='\\'){
+          if((c=fgetc(ci))=='\n')
+            ln++;
+          else if(c==EOF || c=='"')
+            break;
+        }
       }
+      n_lex_return=0;
       return c == EOF ? EOFILE : OTHER;
     }
     else if (c == '/')
-    {
+    { 
+      if((c=fgetc(ci))=='/'){
+        while((c=fgetc(ci))!='\n' && c!=EOF)
+          ;
+        if(c=='\n')
+          ln++;
+        else if (c==EOF)
+          return EOFILE;
+      }
       /* moze byc komentarz */
     }
     else if (isdigit(c) || c == '.')
@@ -80,6 +95,7 @@ lexem_t alex_nextLexem(void)
     }
     else
     {
+      n_lex_return=0;
       return OTHER;
     }
   }
