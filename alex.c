@@ -14,7 +14,7 @@ static int n_lex_return = 0;/* zwrot z funckji nextLexem*/
 
 void alex_init4file(FILE *in)
 {
-  ln = 0;
+  ln = 1;
   ci = in;
 }
 
