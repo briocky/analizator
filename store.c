@@ -29,7 +29,7 @@ void store_add_def(char *fun_name, int line_number, char *inpname){ /* definicja
 void store_add_proto(char *fun_name, int line_number, char *inpname){ /* prototyp funkcji */
     int i,j;
     store.proto_counter++; /* zakladam, ze ktos nie dodal kilku prototypow tej samej funkcji*/
-    
+
     if(store.fun_counter<MAX_FUN_NUMBER){/*sprawdzamy czy jeszcze mozemy dodac cos*/
         store.fun_names[store.fun_counter] = malloc((strlen(inpname)+1)* sizeof (char));
         strcpy(store.fun_names[store.fun_counter],fun_name);
@@ -43,11 +43,13 @@ void store_add_proto(char *fun_name, int line_number, char *inpname){ /* prototy
 
 void store_add_call(char *fun_name, int line_number, char *inpname){
     int i,j;
+    printf("tu:%s\n", fun_name);
     store.call_counter++;
     for(i=0; i<store.fun_counter; i++){
         if(strcmp(store.fun_names[i],fun_name)==0){
-            for(j=0;store.call_line[i][j]!=-1 && j<MAX_FUN_NUMBER;j++)
-                ;
+            for(j=0; j<MAX_FUN_NUMBER;j++)
+                if(store.call_line[i][j]==-1)
+                    break;
             if(store.call_line[i][j]==-1)
                 store.call_line[i][j]=line_number;
             else{
@@ -92,8 +94,25 @@ void wypisz(){
     }else{
         printf("\n");
     }
-    printf("Liczba definicji funkcji: %d.\n", store.def_counter);
-    printf("Liczba wywolan funkcji: %d.\n", store.call_counter);
+    printf("Liczba definicji funkcji: %d.", store.def_counter);
+    if(store.def_counter!=0){
+        for(i=0;i<store.def_counter;i++){
+            printf("\n\t\'%s\' w linii %d;",store.fun_names[i], store.def_line[i]);
+        }
+        printf("\n");
+    }else{
+        printf("\n");
+    }
+    printf("Liczba wywolan funkcji: %d.", store.call_counter);
+    if(store.call_counter!=0){
+        for(i=0;i<store.call_counter;i++){
+            for(int j=0; store.call_line[i][j]!=-1 && j<MAX_FUN_NUMBER ; j++)
+                printf("\n\t\'%s\' w linii %d;",store.fun_names[i], store.call_line[i][j]);
+        }
+        printf("\n");
+    }else{
+        printf("\n");
+    }
 
 
 

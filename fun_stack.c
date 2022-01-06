@@ -21,14 +21,17 @@ void put_on_fun_stack( int par_level, char *funame ) {
 }
 
 char* get_from_fun_stack( void ) {
+	
 	char *name = malloc((strlen(stack -> fname) + 1) * sizeof(char));
 	strcpy(name, stack->fname);
 	//name = stack -> fname;
+
 	stac_t tmp = stack;
+	
 	stack = stack -> next;
+	
 	free(tmp -> fname);
 	//free(tmp -> next);
 	free(tmp);
-	
 	return name;
 }
